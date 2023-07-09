@@ -1,10 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from './components/App'
+import { AuthProvider } from './contexts/AuthContext'
+import { UsersProvider } from './contexts/UsersContext'
 import '@/lib/firebase.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <UsersProvider>
+        <App />
+      </UsersProvider>
+    </AuthProvider>
   </React.StrictMode>,
 )

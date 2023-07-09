@@ -1,6 +1,6 @@
 import { useUsers } from '@/contexts/UsersContext';
 import {format} from 'date-fns';
-import { LoadingScreen } from './LoadingScreen';
+import { LoadingScreen } from '@/components/LoadingScreen';
 import {Message as MessageType} from '@/types/message';
 import nonameIcon from '@/images/noname.png';
 
