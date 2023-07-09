@@ -7,8 +7,8 @@ import {
 import { getConverter } from "./firebase";
 import { MessageDocumentData } from "@/types/message";
 
-export const messagesRef = () => collection(getFirestore(), 'messages').withConverter(
-  getConverter<MessageDocumentData>()
-);
+export const collectionName = 'messages';
 
-export const messagesQuery = () => query(messagesRef(), orderBy('createdAt', 'asc'))
+export const messagesRef = () => collection(getFirestore(), 'messages').withConverter(getConverter<MessageDocumentData>());
+
+export const messagesQuery = () => query(messagesRef(), orderBy('createdAt', 'asc'));

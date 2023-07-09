@@ -3,7 +3,7 @@ import { messagesTest } from '@/../test/queries/firestore/collections/messages';
 
 describe('firestore.queries', () => {
   beforeAll(async () => {
-    await initializeTestEnvironment('testable-firebase-sample-chat-firestore-queries-test');
+    await initializeTestEnvironment('sample-chat-toyamagu-2021');
   });
 
   afterAll(async () => {

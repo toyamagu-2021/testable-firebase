@@ -1,30 +1,29 @@
-import { getConverter, WithId } from '@/lib/firebase';
-import firebase from 'firebase/compat/app';
 import {
   initializeTestEnvironment as _initializeTestEnvironment,
   RulesTestEnvironment,
-} from '@firebase/rules-unit-testing'
+} from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
+import firebase from 'firebase/compat/app';
+import { getConverter, WithId } from '@/lib/firebase';
+import { DocumentData } from 'firebase/firestore';
+
 let testEnv: RulesTestEnvironment;
 
 export const initializeTestEnvironment = async (projectId: string) => {
   process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+  process.env.FIREBASE_STORAGE_EMULATOR_HOST = 'localhost:9199';
   testEnv = await _initializeTestEnvironment({
-    projectId: projectId,
+    projectId,
     firestore: {
-      rules: readFileSync('firestore.rules', 'utf-8'),
+      rules: readFileSync('firestore.rules', 'utf8'),
+    },
+    storage: {
+      rules: readFileSync('storage.rules', 'utf8'),
     },
   });
-}
+};
 
 export const getTestEnv = () => testEnv;
 
-export const setCollection = <T extends firebase.firestore.DocumentData>(
-  ref: firebase.firestore.CollectionReference,
-  instances: WithId<T>[]
-) =>
-  Promise.all(
-    instances.map((_) =>
-      ref.doc(_.id).set(getConverter<T>().toFirestore(_))
-    )
-  );
+export const setCollection = <T extends DocumentData>(ref: firebase.firestore.CollectionReference, instances: WithId<T>[]) =>
+  Promise.all(instances.map((_) => ref.doc(_.id).set(getConverter<T>().toFirestore(_))));

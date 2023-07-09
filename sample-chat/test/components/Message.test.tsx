@@ -57,7 +57,6 @@ describe('Message', async() => {
     });
   })
 
-
   it('message', async () => {
     render(<Message message={message}/>);
     await waitFor(() => {
