@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "deploy": "yarn build && firebase deploy --except functions",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build:test": "yarn build --mode test",
     "preview": "vite preview",
-    "test": "vitest run",
-    "emulators:start:firestore": "firebase emulators:start --only firestore"
+    "deploy": "yarn build && firebase deploy --except functions",
+    "deploy:rules": "firebase deploy --only firestore:rules,storage",
+    "test": "vitest run --dir test",
+    "test:e2e": "yarn cypress run",
+    "emulators:start": "firebase emulators:start --only hosting,auth,firestore,storage",
+    "emulators:test": "firebase emulators:exec --only firestore,storage 'yarn test'",
+    "emulators:e2e": "yarn build:test && firebase emulators:exec --only hosting,auth,firestore,storage 'yarn test:e2e'"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
