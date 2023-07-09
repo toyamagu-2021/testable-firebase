@@ -6,10 +6,25 @@ import {
   SnapshotOptions,
   FirestoreDataConverter,
   PartialWithFieldValue,
+  serverTimestamp as _serverTimestamp,
 } from 'firebase/firestore';
 import { omit } from 'lodash-es';
+import {
+  User,
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut as _signOut
+} from 'firebase/auth';
 
+const serverTimestamp = _serverTimestamp as unknown as () => Timestamp;
 
+const signInGoogleWithPopup = async () => {
+  const provider = new GoogleAuthProvider();
+  return signInWithPopup(getAuth(), provider);
+}
+
+const signOut = async () => _signOut(getAuth());
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,10 +37,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 
-export { Timestamp }
-export type WithId<T> = T & { id: string };
+type WithId<T> = T & { id: string };
 
-export const getConverter = <T extends DocumentData>(): FirestoreDataConverter<WithId<T>> => ({
+const getConverter = <T extends DocumentData>(): FirestoreDataConverter<WithId<T>> => ({
   toFirestore: (
     data: PartialWithFieldValue<WithId<T>>
   ): DocumentData => {
@@ -41,3 +55,12 @@ export const getConverter = <T extends DocumentData>(): FirestoreDataConverter<W
     };
   }
 })
+
+export {
+  Timestamp,
+  getConverter,
+  signInGoogleWithPopup,
+  signOut,
+  serverTimestamp,
+}
+export type { User, WithId }
