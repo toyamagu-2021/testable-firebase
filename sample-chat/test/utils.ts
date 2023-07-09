@@ -1,16 +1,16 @@
+import { getConverter, WithId } from '@/lib/firebase';
+import firebase from 'firebase/compat/app';
 import {
   initializeTestEnvironment as _initializeTestEnvironment,
   RulesTestEnvironment,
 } from '@firebase/rules-unit-testing'
 import { readFileSync } from 'fs';
-import { getConverter, WithId } from '@/lib/firebase';
-import firebase from 'firebase/compat/app';
-
 let testEnv: RulesTestEnvironment;
 
-export const initializeTestEnvironment = async () => {
+export const initializeTestEnvironment = async (projectId: string) => {
+  process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
   testEnv = await _initializeTestEnvironment({
-    projectId: 'fs-sample-open-chat-test',
+    projectId: projectId,
     firestore: {
       rules: readFileSync('firestore.rules', 'utf-8'),
     },
