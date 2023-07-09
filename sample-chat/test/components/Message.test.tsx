@@ -14,6 +14,13 @@ const sender = userFactory.build({
   photoUrl: 'user-photo-url',
 });
 
+const useBlobMock = vi.fn();
+vi.mock('@hook/useBlob', () => {
+  return {
+    useBlob: useBlobMock,
+  };
+})
+
 vi.mock('@/contexts/UsersContext', () => {
   return {
     useUsers: () => {
@@ -35,6 +42,7 @@ describe('Message', async() => {
       new Date('2022-07-01 00:00:00+09:00')
     ),
   });
+
 
   it('icon', async () => {
     render(<Message message={message}/>);

@@ -1,24 +1,25 @@
 import { useAuth } from "@/contexts/AuthContext"
-import { serverTimestamp } from "@/lib/firebase";
 import { addMessage } from "@/lib/message";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 
 export const MessageForm = () => {
   const { currentUser } = useAuth();
   const [content, setContent] = useState<string>('');
+  const imageInput = useRef<HTMLInputElement>(null)
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+  const handleChangeContent = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     setContent(event.currentTarget.value);
-  };
+  }
 
   const handleClick = async() => {
     if(!content || !currentUser) return;
-    await addMessage({
-      content,
-      senderId: currentUser.uid,
-      createdAt: serverTimestamp(),
-    });
+    const [image = null] = imageInput.current?.files || [];
+    await addMessage(content, image, currentUser.uid);
     setContent('');
+    if(imageInput.current) imageInput.current.value='';
   }
 
   return (
@@ -27,7 +28,13 @@ export const MessageForm = () => {
         aria-label="content-input"
         type="text"
         value={content}
-        onChange={handleChange}
+        onChange={handleChangeContent}
+      />
+      <input 
+        aria-label="image-input"
+        type="file"
+        accept="image/*"
+        ref={imageInput}
       />
       <button onClick={handleClick} disabled={!content}>Send</button>
     </>
