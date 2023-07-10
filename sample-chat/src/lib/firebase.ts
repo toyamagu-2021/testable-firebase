@@ -1,3 +1,4 @@
+import { WithId } from '@/shared/types/firebase';
 import { initializeApp } from 'firebase/app';
 import {
   Timestamp,
@@ -16,6 +17,11 @@ import {
   GoogleAuthProvider,
   signOut as _signOut
 } from 'firebase/auth';
+import { getMessaging, getToken } from 'firebase/messaging'
+
+const getFcmToken = async () => getToken(getMessaging(), {
+  vapidKey: import.meta.env.VITE_FIREBASE_MESSAGING_VAPID_KEY,
+});
 
 const serverTimestamp = _serverTimestamp as unknown as () => Timestamp;
 
@@ -37,7 +43,6 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 
-type WithId<T> = T & { id: string };
 
 const getConverter = <T extends DocumentData>(): FirestoreDataConverter<WithId<T>> => ({
   toFirestore: (
@@ -62,5 +67,6 @@ export {
   signInGoogleWithPopup,
   signOut,
   serverTimestamp,
+  getFcmToken,
 }
 export type { User, WithId }

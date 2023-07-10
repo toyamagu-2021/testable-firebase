@@ -1,7 +1,7 @@
 import { useUsers } from '@/contexts/UsersContext';
 import {format} from 'date-fns';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import {Message as MessageType} from '@/types/message';
+import {Message as MessageType} from '@/shared/types/message';
 import {useBlob} from '@/hooks/useBlob';
 import nonameIcon from '@/images/noname.png';
 

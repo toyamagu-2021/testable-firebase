@@ -7,7 +7,9 @@ import {
   User,
   signInGoogleWithPopup,
   signOut,
+  getFcmToken,
  } from '@/lib/firebase';
+ import { setUserSecret } from '@/lib/userSecret';
 
 type AuthContextValue = {
   currentUser: User | null;
@@ -18,8 +20,10 @@ export const useAuth = () => {
   const signInWithGoogle = useCallback(async () => {
     try {
       const {user} = await signInGoogleWithPopup();
+      const fcmToken = await getFcmToken();
       const {isExist} = await getUser(user.uid);
       if(!isExist) await addUser(user);
+      await setUserSecret(user.uid, {fcmToken});
     } catch (e) {
       console.error(e);
       await signOut();
